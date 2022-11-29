@@ -3,11 +3,11 @@
 pragma solidity ^0.8.0;
 import "./IERC20.sol";
 
-contract CSAMM {
+contract EkolanceFixedRatioSwap {
     IERC20 public immutable token0;
     IERC20 public immutable token1;
 
-    uint256 public reserve0; // -- 1.1
+    uint256 public reserve0;
     uint256 public reserve1;
 
     uint256 public tokenAratio = 200;

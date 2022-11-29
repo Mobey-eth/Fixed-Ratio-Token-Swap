@@ -138,6 +138,7 @@ contract EkolanceFixedRatioSwap {
             // Apercentage[msg.sender] = ( AsupplyProvided[msg.sender] * 1000 ) / bal0;
             // Bpercentage[msg.sender] = ( BsupplyProvided[msg.sender] * 1000 ) / bal1;
             if (!isLP[msg.sender]) {
+                isLP[msg.sender] = true;
                 liquidityProviders.push(msg.sender);
             }
             _updateReserves(bal0, bal1);
@@ -168,7 +169,6 @@ contract EkolanceFixedRatioSwap {
 
         isLP[msg.sender] = false;
 
-        _updateReserves(reserve0 - amount0Out, reserve1 - amount1Out);
         if (amount0Out > 0) {
             token0.transfer(msg.sender, amount0Out);
         }
@@ -177,6 +177,11 @@ contract EkolanceFixedRatioSwap {
             token1.transfer(msg.sender, amount1Out);
         }
 
+        uint256 bal0 = token0.balanceOf(address(this));
+        uint256 bal1 = token1.balanceOf(address(this));
+
+        _updateReserves(bal0, bal1);
+
         uint256 lpArrayLength = liquidityProviders.length;
         for (uint256 i; i < lpArrayLength; i++) {
             address _lp = liquidityProviders[i];
@@ -184,10 +189,19 @@ contract EkolanceFixedRatioSwap {
                 liquidityProviders[i] = liquidityProviders[
                     liquidityProviders.length - 1
                 ];
-                liquidityProviders.pop();
             }
         }
-        updatePercentages();
+        liquidityProviders.pop();
+        AsupplyProvided[msg.sender] = 0;
+        BsupplyProvided[msg.sender] = 0;
+        if (liquidityProviders.length == 1) {
+            address soloLP = liquidityProviders[0];
+            Apercentage[soloLP] = 1000; // 100%
+            Bpercentage[soloLP] = 1000; // 100%
+        }
+        if (liquidityProviders.length > 1) {
+            updatePercentages();
+        }
 
         emit RemoveLiquidity(msg.sender, amount0Out, amount1Out);
     }

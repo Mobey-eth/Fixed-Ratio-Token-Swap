@@ -25,8 +25,8 @@ contract EkolanceFixedRatioSwap {
     uint256 public TotalSupplyA; // Total shares of tokenA
     uint256 public TotalSupplyB; // Total shares of tokenB
 
-    mapping(address => uint256) public balanceOfA;
-    mapping(address => uint256) public balanceOfB;
+    mapping(address => uint256) public balanceOfA; // Balance of shares of tokenA owned by "address"
+    mapping(address => uint256) public balanceOfB; // Balance of shares of tokenB owned by "address"
 
     uint256 public tokenAratio = 200;
     uint256 public tokenBratio = 50;
@@ -62,24 +62,28 @@ contract EkolanceFixedRatioSwap {
         token1 = IERC20(_token1);
     }
 
+    // Private Function to mint shares of tokenA
     function mintA(address _to, uint256 _amount) private {
         balanceOfA[_to] += _amount;
         TotalSupplyA += _amount;
         emit MintA(_to, _amount);
     }
 
+    // Private Function to mint shares of tokenB
     function mintB(address _to, uint256 _amount) private {
         balanceOfB[_to] += _amount;
         TotalSupplyB += _amount;
         emit MintB(_to, _amount);
     }
 
+    // private Function to burn shares of tokenA
     function burnA(address _from, uint256 _amount) private {
         balanceOfA[_from] -= _amount;
         TotalSupplyA -= _amount;
         emit BurnA(_from, _amount);
     }
 
+    // private Function to burn shares of tokenB
     function burnB(address _from, uint256 _amount) private {
         balanceOfB[_from] -= _amount;
         TotalSupplyB -= _amount;
@@ -274,6 +278,7 @@ contract EkolanceFixedRatioSwap {
         tokenBShares = balanceOfB[_liquidityProvider];
     }
 
+    // function To get the pool reserves at a time instance
     function getReserves()
         external
         view

@@ -12,7 +12,7 @@ LEGEND -> a = dx = amount of token A in/out
         S(x) = shares of tokenA to mint
         S(y) = shares of tokenB to mint
 */
-pragma solidity ^0.8.0;
+pragma solidity 0.8.17;
 import "./IERC20.sol";
 
 contract EkolanceFixedRatioSwap {

@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 import "./IERC20.sol";
 
-contract EkolanceFixedRatioSwap {
+contract EkolancePercentageFixedRatioSwap {
     IERC20 public immutable token0;
     IERC20 public immutable token1;
 

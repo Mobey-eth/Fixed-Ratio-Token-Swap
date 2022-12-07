@@ -218,14 +218,11 @@ contract EkolanceFixedRatioSwap {
         */
         require(isLP[msg.sender], "Caller is not a liquidity provider!");
 
-        require(
-            _checkShares(_sharesA, _sharesB),
-            "Caller is not a liquidity provider!"
-        );
+        require(_checkShares(_sharesA, _sharesB), "Insufficient Balance!");
 
         amount0Out = (reserve0 * _sharesA) / TotalSupplyA;
         amount1Out = (reserve1 * _sharesB) / TotalSupplyB;
-        isLP[msg.sender] = false;
+        // isLP[msg.sender] = false;
         burnA(msg.sender, _sharesA);
         burnB(msg.sender, _sharesB);
 
